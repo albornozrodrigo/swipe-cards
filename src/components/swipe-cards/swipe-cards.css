@@ -1,0 +1,43 @@
+:root {
+  --color-primary: oklch(65% 0.241 354.308);
+}
+
+.ripple {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 120px;
+  height: 120px;
+  background-color: var(--color-primary);
+  border-radius: 100px;
+  padding-top: 6px;
+}
+
+.ripple:before,
+.ripple:after {
+  content: "";
+  position: absolute;
+  border: 3px solid var(--color-primary);
+  border-radius: 100px;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transform-origin: center center;
+}
+
+.ripple:before {
+  animation: ripple 2s linear infinite;
+}
+
+.ripple:after {
+  animation: ripple 2s 1s linear infinite;
+}
+
+@keyframes ripple {
+  to {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
