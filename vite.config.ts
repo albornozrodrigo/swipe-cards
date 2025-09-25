@@ -23,7 +23,6 @@ export default defineConfig({
         "./no-users": "./src/components/swipe-cards/no-users.tsx",
         "./ripple": "./src/components/swipe-cards/ripple.tsx",
         "./swipe-card": "./src/components/swipe-cards/swipe-card.tsx",
-        "./swipe-cards.state": "./src/components/swipe-cards/swipe-cards.state.ts",
         "./swipe-cards.css": "./src/components/swipe-cards/swipe-cards.css",
       },
       shared: ["react", "react-dom"],

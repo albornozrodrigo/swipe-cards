@@ -15,14 +15,7 @@ export interface SwipeCardHandle {
 
 export interface SwipeCardProps {
   index: number;
+  isFront: boolean;
   user: User;
   onSwipe: (user: User, direction: "left" | "right") => Promise<void>;
-}
-
-export interface SwipeProps {
-  cards: User[] | [];
-  discardedCards: User[] | [];
-  setCards: (cards: User[]) => void;
-  setDiscardedCards: (cards: User[]) => void;
-  undo: () => void;
 }

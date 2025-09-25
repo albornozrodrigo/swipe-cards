@@ -13,7 +13,6 @@ import {
   useMemo,
 } from "react";
 import type { SwipeCardHandle, SwipeCardProps } from "./interfaces";
-import { useSwipeCardsState } from "./swipe-cards.state";
 
 const SWIPE_THRESHOLD = 100;
 const SWIPE_ANIMATION_CONFIG = {
@@ -25,10 +24,7 @@ const SWIPE_ANIMATION_CONFIG = {
 
 const SwipeCard = memo(
   forwardRef<SwipeCardHandle, SwipeCardProps>(
-    ({ index, user, onSwipe }, ref) => {
-      /** State */
-      const { cards } = useSwipeCardsState();
-
+    ({ index, user, isFront, onSwipe }, ref) => {
       /** Hooks */
       const x = useMotionValue(0);
       const [scope, animate] = useAnimate();
@@ -38,10 +34,10 @@ const SwipeCard = memo(
       const rotate = useTransform(x, [-150, 150], [-16, 16]);
 
       /** Memoized values */
-      const isFront = useMemo(() => {
-        const lastIndex = cards.length - 1;
-        return index === lastIndex;
-      }, [cards.length, index]);
+      // const isFront = useMemo(() => {
+      //   const lastIndex = cards.length - 1;
+      //   return index === lastIndex;
+      // }, [cards.length, index]);
 
       const handleDragEnd = useCallback(async () => {
         const currentX = x.get();

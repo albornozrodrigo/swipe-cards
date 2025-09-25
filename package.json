@@ -11,15 +11,13 @@
     "start-mf": "pnpm build && pnpm preview"
   },
   "dependencies": {
-    "@module-federation/vite": "^1.8.1",
     "@tailwindcss/vite": "^4.1.13",
     "framer-motion": "^12.23.18",
     "lucide-react": "^0.544.0",
     "prettier-plugin-organize-imports": "^4.3.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
-    "tailwindcss": "^4.1.13",
-    "zustand": "^5.0.8"
+    "tailwindcss": "^4.1.13"
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",

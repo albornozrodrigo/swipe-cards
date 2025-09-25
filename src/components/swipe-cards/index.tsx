@@ -7,7 +7,6 @@ import { NoUsers } from "./no-users";
 import RippleLoader from "./ripple";
 import SwipeCard from "./swipe-card";
 import './swipe-cards.css';
-import { useSwipeCardsState } from "./swipe-cards.state";
 
 interface InitialDataProps {
   usersList: User[];
@@ -17,17 +16,28 @@ export default function SwipeCards({
   usersList
 }: InitialDataProps) {
   const [isLoading, setIsLoading] = useState(false);
+  const [discardedCards, setDiscardedCards] = useState<User[]>([]);
+  const [cards, setCards] = useState<User[]>([]);
   const frontCardRef = useRef<SwipeCardHandle | null>(null);
   const lastSwipeTime = useRef<number>(0);
 
+  const undo = useCallback(async () => {
+    const last = [...discardedCards].at(-1);
+  
+    if (!last) return;
+  
+    setCards((cards) => [...cards, last]);
+    setDiscardedCards((discardedCards) => discardedCards.slice(0, -1));
+  }, [setCards, setDiscardedCards, discardedCards]);
+
   /** State */
-  const {
-    discardedCards,
-    setCards,
-    setDiscardedCards,
-    cards,
-    undo,
-  } = useSwipeCardsState();
+  // const {
+  //   discardedCards,
+  //   setCards,
+  //   setDiscardedCards,
+  //   cards,
+  //   undo,
+  // } = useSwipeCardsState();
 
   useEffect(() => {
     setIsLoading(true);
@@ -89,6 +99,7 @@ export default function SwipeCards({
     if (now - lastSwipeTime.current < 300) return;
 
     lastSwipeTime.current = now;
+
     undo();
   }, [undo]);
 
@@ -111,6 +122,7 @@ export default function SwipeCards({
             ref={isFront ? frontCardRef : null}
             user={user}
             index={index}
+            isFront={isFront}
             onSwipe={handleSwipe}
           />
         );
