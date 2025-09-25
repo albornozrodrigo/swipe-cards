@@ -1,5 +1,5 @@
-import { federation } from '@module-federation/vite';
-// import federation from "@originjs/vite-plugin-federation";
+// import { federation } from '@module-federation/vite';
+import federation from "@originjs/vite-plugin-federation";
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
@@ -7,11 +7,9 @@ import { defineConfig } from 'vite';
 // https://vite.dev/config/
 export default defineConfig({
   server: {
-    port: 5174,
+    port: 5001,
+    host: true,
     cors: true,
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-    },
   },
   plugins: [
     react(),
@@ -28,25 +26,7 @@ export default defineConfig({
         "./swipe-cards.state": "./src/components/swipe-cards/swipe-cards.state.ts",
         "./swipe-cards.css": "./src/components/swipe-cards/swipe-cards.css",
       },
-      // shared: ["react", "react-dom", "zustand", "framer-motion", "tailwindcss"],
-      shared: {
-        'react': {
-          singleton: true,
-        },
-        'react-dom': {
-          singleton: true,
-        },
-        'zustand': {
-          singleton: true,
-        },
-        'framer-motion': {
-          singleton: false,
-        },
-        // 'tailwindcss': {
-        //   singleton: true,
-        //   requiredVersion: false,
-        // },
-      },
+      shared: ["react", "react-dom"],
     }),
   ],
   build: {
@@ -54,12 +34,12 @@ export default defineConfig({
     minify: false,
     cssCodeSplit: false,
     rollupOptions: {
-      external: [],
+      external: [], // Não externalizar nada
     },
   },
   preview: {
     host: "localhost",
-    port: 5174,
+    port: 5001,
     strictPort: true,
     cors: true,
     headers: {

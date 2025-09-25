@@ -34,7 +34,7 @@ export default function SwipeCards({
     setTimeout(() => {
       setIsLoading(false);
       if(usersList) setCards(usersList);
-    }, 1000);
+    }, 3000);
   }, [usersList, setCards]);
 
   useEffect(() => {
