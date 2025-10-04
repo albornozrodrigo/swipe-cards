@@ -33,12 +33,6 @@ const SwipeCard = memo(
       const opacity = useTransform(x, [-150, 0, 150], [0, 1, 0]);
       const rotate = useTransform(x, [-150, 150], [-16, 16]);
 
-      /** Memoized values */
-      // const isFront = useMemo(() => {
-      //   const lastIndex = cards.length - 1;
-      //   return index === lastIndex;
-      // }, [cards.length, index]);
-
       const handleDragEnd = useCallback(async () => {
         const currentX = x.get();
         if (Math.abs(currentX) > SWIPE_THRESHOLD) {

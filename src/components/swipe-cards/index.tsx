@@ -30,15 +30,6 @@ export default function SwipeCards({
     setDiscardedCards((discardedCards) => discardedCards.slice(0, -1));
   }, [setCards, setDiscardedCards, discardedCards]);
 
-  /** State */
-  // const {
-  //   discardedCards,
-  //   setCards,
-  //   setDiscardedCards,
-  //   cards,
-  //   undo,
-  // } = useSwipeCardsState();
-
   useEffect(() => {
     setIsLoading(true);
     setTimeout(() => {

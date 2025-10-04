@@ -4,10 +4,11 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "preinstall": "npx only-allow pnpm",
     "dev": "vite --port 5001 --strictPort",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview",
+    "preview": "vite preview --port 5001 --strictPort",
     "start-mf": "pnpm build && pnpm preview"
   },
   "dependencies": {
