@@ -12,7 +12,7 @@
     "start-mf": "pnpm build && pnpm preview"
   },
   "dependencies": {
-    "@tailwindcss/vite": "^4.1.13",
+    "@tailwindcss/vite": "^4.1.14",
     "framer-motion": "^12.23.19",
     "lucide-react": "^0.544.0",
     "prettier-plugin-organize-imports": "^4.3.0",
