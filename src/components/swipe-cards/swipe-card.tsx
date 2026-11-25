@@ -33,52 +33,62 @@ const SwipeCard = memo(
       const opacity = useTransform(x, [-150, 0, 150], [0, 1, 0]);
       const rotate = useTransform(x, [-150, 150], [-16, 16]);
 
+      /**
+       * Joga o card para fora da tela e só então avisa o pai, que o remove da
+       * lista. O card é o único dono da animação de saída: o pai nunca anima
+       * de volta. Antes o pai chamava `swipe()` de novo dentro do `onSwipe`,
+       * o que reanimava um card já desmontado (`scope.current === null`) e
+       * quebrava com "Invalid value used as weak map key".
+       */
+      const flyOut = useCallback(
+        async (direction: "left" | "right") => {
+          if (!scope.current) return;
+
+          await animate(
+            scope.current,
+            {
+              x:
+                direction === "left"
+                  ? -window.innerWidth * 1.2
+                  : window.innerWidth * 1.2,
+              rotate: direction === "left" ? -25 : 25,
+              opacity: 0,
+            },
+            SWIPE_ANIMATION_CONFIG
+          );
+
+          onSwipe(user, direction);
+        },
+        [animate, scope, onSwipe, user]
+      );
+
       const handleDragEnd = useCallback(async () => {
         const currentX = x.get();
         if (Math.abs(currentX) > SWIPE_THRESHOLD) {
-          const direction = currentX > 0 ? "right" : "left";
-          await onSwipe(user, direction);
+          await flyOut(currentX > 0 ? "right" : "left");
         }
-      }, [x, onSwipe, user]);
+      }, [x, flyOut]);
 
       useImperativeHandle(
         ref,
         () => ({
           swipe: async (direction: "left" | "right") => {
-            const finalX =
-              direction === "left"
-                ? -window.innerWidth * 1.2
-                : window.innerWidth * 1.2;
-            const thresholdX =
-              direction === "left"
-                ? -SWIPE_THRESHOLD - 20
-                : SWIPE_THRESHOLD + 20;
+            if (!scope.current) return;
 
             // Primeira fase: move até passar do threshold (simula o drag)
-            await animate(x, thresholdX, {
-              duration: 0.08,
-              ease: "easeOut",
-            });
-
-            // Segunda fase: animação final para fora da tela (simula o release)
             await animate(
-              scope.current,
-              {
-                x: finalX,
-                rotate: direction === "left" ? -25 : 25,
-                opacity: 0,
-              },
-              SWIPE_ANIMATION_CONFIG
+              x,
+              direction === "left"
+                ? -SWIPE_THRESHOLD - 20
+                : SWIPE_THRESHOLD + 20,
+              { duration: 0.08, ease: "easeOut" }
             );
 
-            // Executa o callback e remove o card
-            await onSwipe(user, direction);
-
-            // Reseta o MotionValue
-            x.set(0);
+            // Segunda fase: sai da tela (simula o release)
+            await flyOut(direction);
           },
         }),
-        [animate, scope, x, onSwipe, user]
+        [animate, scope, x, flyOut]
       );
 
       const motionStyle = useMemo(

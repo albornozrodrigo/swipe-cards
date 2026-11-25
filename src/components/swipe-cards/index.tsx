@@ -54,27 +54,12 @@ export default function SwipeCards({
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [undo]);
 
-  const handleSwipe = useCallback(
-    async (user: User, direction: "left" | "right") => {
-      const newCards = cards.filter((card) => card.id !== user.id);
-      setCards(newCards);
-      setDiscardedCards([...discardedCards, user]);
-
-      if (direction === "left") {
-        await frontCardRef.current?.swipe("left");
-      }
-
-      if (direction === "right") {
-        await frontCardRef.current?.swipe("right");
-      }
-    },
-    [
-      cards,
-      setCards,
-      setDiscardedCards,
-      discardedCards,
-    ]
-  );
+  // Só atualiza o estado: quando isto roda o card já saiu da tela pela
+  // própria animação (ver `flyOut` em swipe-card.tsx).
+  const handleSwipe = useCallback((user: User) => {
+    setCards((cards) => cards.filter((card) => card.id !== user.id));
+    setDiscardedCards((discarded) => [...discarded, user]);
+  }, []);
 
   // Handler otimizado para botões
   const handleButtonSwipe = useCallback((direction: "left" | "right") => {
@@ -122,23 +107,26 @@ export default function SwipeCards({
       <div className="mb-4 flex items-center justify-evenly gap-8">
         <button
           onClick={() => handleButtonSwipe("left")}
+          aria-label="Descartar"
           className="rounded-full bg-red-500 p-4 text-white cursor-pointer transition-all duration-300 hover:bg-red-400 touch-manipulation select-none"
         >
-          <XIcon />
+          <XIcon aria-hidden="true" />
         </button>
 
         <button
           onClick={handleUndo}
+          aria-label="Desfazer"
           className="rounded-full bg-yellow-500 p-2.5 text-white cursor-pointer transition-all duration-300 hover:bg-yellow-400 touch-manipulation select-none"
         >
-          <UndoIcon />
+          <UndoIcon aria-hidden="true" />
         </button>
 
         <button
           onClick={() => handleButtonSwipe("right")}
+          aria-label="Curtir"
           className="rounded-full bg-green-500 p-4 text-white cursor-pointer transition-all duration-300 hover:bg-green-400 touch-manipulation select-none"
         >
-          <HeartIcon />
+          <HeartIcon aria-hidden="true" />
         </button>
       </div>
     </div>

@@ -10,12 +10,12 @@ export interface User {
 }
 
 export interface SwipeCardHandle {
-  swipe: (direction: "left" | "right") => void;
+  swipe: (direction: "left" | "right") => Promise<void>;
 }
 
 export interface SwipeCardProps {
   index: number;
   isFront: boolean;
   user: User;
-  onSwipe: (user: User, direction: "left" | "right") => Promise<void>;
+  onSwipe: (user: User, direction: "left" | "right") => void;
 }
